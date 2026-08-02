@@ -1,3 +1,8 @@
+---
+title: FAQ — cleaning Python environments and reclaiming disk space
+description: Answers to common questions about what killpy detects, how safely it deletes environments, and how it fits into scripts and CI.
+---
+
 # FAQ
 
 ## What is `killpy`?

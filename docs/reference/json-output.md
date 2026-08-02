@@ -1,3 +1,8 @@
+---
+title: JSON output — stable schema for scripting and automation
+description: The JSON array and NDJSON streaming formats emitted by killpy list and find, with example payloads you can pipe straight into jq.
+---
+
 # JSON Output
 
 The `list` command can emit either a JSON array or NDJSON.

@@ -1,3 +1,8 @@
+---
+title: Detector types — the 11 environment types killpy finds
+description: Every detector killpy registers — from venv, conda, and poetry to caches and build artifacts — and how each category is found and deleted.
+---
+
 # Detector Types
 
 The scanner registers detectors in `killpy/detectors/__init__.py`.

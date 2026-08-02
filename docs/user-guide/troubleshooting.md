@@ -1,3 +1,8 @@
+---
+title: Troubleshooting — common killpy problems and fixes
+description: What to check when conda or pipx results are missing, tool-managed deletions fail, or killpy clean removes less than you expected.
+---
+
 # Troubleshooting
 
 ## `conda` environments do not appear

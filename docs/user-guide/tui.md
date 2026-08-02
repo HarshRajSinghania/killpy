@@ -1,3 +1,8 @@
+---
+title: Interactive TUI — browse, mark, and delete environments
+description: A tour of killpy's terminal interface — progressive scan results, keyboard shortcuts for marking and deleting rows, and its safety model.
+---
+
 # TUI
 
 The default `killpy` command launches a Textual application defined in `killpy/cli.py`.

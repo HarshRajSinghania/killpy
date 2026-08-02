@@ -1,3 +1,8 @@
+---
+title: Filtering and selection — target exactly what to delete
+description: Exclude paths, filter by age with --older-than, and use the TUI's live filter and multi-select to delete exactly the rows you intend.
+---
+
 # Filtering and Selection
 
 ## Excluding paths

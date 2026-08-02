@@ -1,3 +1,8 @@
+---
+title: CLI reference — every killpy command and flag
+description: Every killpy subcommand in one place — list, find, delete, stats, clean, and doctor — with usage examples, flags, and JSON output options.
+---
+
 # CLI reference
 
 Complete reference for every `killpy` subcommand and flag.

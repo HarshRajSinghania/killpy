@@ -12,6 +12,8 @@ repos:
     rev: 1.0.0
     hooks:
     - id: mdformat
+      additional_dependencies:
+        - mdformat-frontmatter
 
   - hooks:
     - id: commitizen

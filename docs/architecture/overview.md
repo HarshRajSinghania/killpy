@@ -1,3 +1,8 @@
+---
+title: Architecture overview — how killpy scans and deletes safely
+description: How the Scanner, detectors, and Cleaner fit together, and how the intelligence layer scores and classifies environments for killpy doctor.
+---
+
 # Architecture Overview
 
 `killpy` is structured around a simple pipeline:

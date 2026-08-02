@@ -1,3 +1,8 @@
+---
+title: Quickstart — scan and clean your first Python environments
+description: Run killpy with pipx or uvx, launch the TUI, preview a cleanup with --dry-run, and free disk space from your first scan in minutes.
+---
+
 # Quickstart
 
 ## Run without installing

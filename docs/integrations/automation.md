@@ -1,3 +1,8 @@
+---
+title: Automation — killpy in scripts, CI, and pre-commit hooks
+description: Use killpy's pre-commit hooks, JSON output, and non-interactive delete flags to automate environment cleanup in scripts and CI.
+---
+
 # Automation
 
 `killpy` can be used as an interactive cleanup tool, but it also has enough CLI surface for automation.
@@ -7,8 +12,8 @@
 `killpy` ships four hooks for [pre-commit](https://pre-commit.com/).
 
 ```yaml
-- repo: https://github.com/Tlaloc-Es/KillPy
-  rev: 0.20.0
+- repo: https://github.com/Tlaloc-Es/killpy
+  rev: 1.0.1
   hooks:
     - id: killpy                  # remove __pycache__ on every commit
     - id: killpy-clean-caches     # all cache dirs: .mypy_cache, .pytest_cache, .ruff_cache …

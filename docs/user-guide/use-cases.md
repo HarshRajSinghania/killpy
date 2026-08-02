@@ -1,6 +1,11 @@
+---
+title: Use cases — copy-paste recipes for common Python cleanups
+description: Complete, copy-pasteable killpy recipes — find old virtualenvs, remove Conda environments, measure disk usage, and clean caches and build artifacts.
+---
+
 # Use Cases
 
-This page is intentionally written around common search intents so both users and LLM-based tools can quickly match `killpy` to the right workflow.
+Each section below is a complete, copy-pasteable recipe for a common cleanup task.
 
 ## Find old Python virtual environments
 
@@ -30,7 +35,7 @@ If you want to see how much disk space Python environments consume by category:
 killpy stats --path ~/projects
 ```
 
-This is useful for questions like `how much space do my virtualenvs use` or `what is taking space in my Python setup`.
+The per-type breakdown is usually where the surprise is — virtualenvs and caches add up much faster than most people expect.
 
 ## Clean Poetry, pipx, and pyenv leftovers
 
@@ -63,11 +68,11 @@ If you want broader visibility into caches and artifacts before deletion:
 killpy list --path ~/projects --type cache --type artifacts
 ```
 
-This is the better workflow for users searching for `remove Python cache folders`, `clean build directories`, or `find Python artifacts taking disk space`.
+Start with `list` when you want to review sizes before anything is removed.
 
 ## Build machine-readable inventories
 
-If you need JSON output for scripts, reporting, or other AI agents:
+If you need JSON output for scripts, reporting, or automation:
 
 ```bash
 killpy list --path ~/projects --json

@@ -1,3 +1,8 @@
+---
+title: Install killpy — pip, pipx, uv, or run it without installing
+description: How to install killpy with pip, pipx, or uv on Python 3.10+, verify the install, and set up a local development environment from source.
+---
+
 # Installation
 
 ## Requirements
