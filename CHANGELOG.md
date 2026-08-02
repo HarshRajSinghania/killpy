@@ -1,3 +1,9 @@
+## 1.1.0 (2026-08-02)
+
+### Feat
+
+- show a one-line star hint after a successful cleanup
+
 ## 1.0.1 (2026-07-22)
 
 ### Perf
