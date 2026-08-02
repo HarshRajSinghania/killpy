@@ -43,6 +43,7 @@ ______________________________________________________________________
   - [Multi-select mode](#multi-select-mode)
 - [CLI cheatsheet](#cli-cheatsheet)
 - [FAQ](#faq)
+- [Roadmap](#roadmap)
 - [Pre-commit hooks](#pre-commit-hooks)
 - [Safety](#safety)
 - [Contributing](#contributing)
@@ -338,6 +339,16 @@ Nothing is removed. You see exactly what would happen.
 **Why is Python using so much disk space?**
 
 Each virtual environment is a full copy (or symlinked tree) of a Python interpreter plus all installed packages. A typical project `.venv` with common dependencies weighs 200 MB–1 GB. Multiply by dozens of projects and you get tens of gigabytes — all orphaned when the project is archived.
+
+______________________________________________________________________
+
+## Roadmap
+
+Development happens in the open — the [issue tracker](https://github.com/Tlaloc-Es/killpy/issues) **is** the roadmap: new filters and flags for the CLI, TUI improvements, better Windows support, and more.
+
+Want to contribute? Start with a [good first issue](https://github.com/Tlaloc-Es/killpy/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) — each one is small, scoped, and comes with pointers to the relevant code.
+
+Missing a detector for your favourite tool? Propose it in the [detector ideas thread](https://github.com/Tlaloc-Es/killpy/discussions/43).
 
 ______________________________________________________________________
 
