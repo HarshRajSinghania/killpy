@@ -40,7 +40,7 @@ nav:
       - Installation: getting-started/installation.md
   - User Guide:
       - TUI: user-guide/tui.md
-      - CLI: user-guide/cli.md
+      - CLI Reference: user-guide/cli.md
       - Use Cases: user-guide/use-cases.md
       - FAQ: user-guide/faq.md
       - Filtering and Selection: user-guide/filtering-and-selection.md

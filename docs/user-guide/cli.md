@@ -1,99 +1,99 @@
-# CLI
+# CLI reference
 
-## Top-level command
+Complete reference for every `killpy` subcommand and flag.
+
+## `killpy` — launch TUI or headless delete
 
 The top-level command lives in `killpy/__main__.py` and does one of two things:
 
 - launches the TUI by default
 - runs a non-interactive bulk delete flow when `--delete-all` is provided
 
+```
+Usage: killpy [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --path DIRECTORY      Root directory to scan  [default: cwd]
+  -E, --exclude TEXT    Comma-separated path patterns to skip
+                        e.g. --exclude "backups,legacy"
+  -D, --delete-all      Scan and delete ALL found environments without
+                        launching the TUI
+  -y, --yes             Skip confirmation prompt (use with --delete-all)
+  --force               With --delete-all: also delete environments
+                        currently in use (⚠ system-critical)
+  --help                Show this message and exit.
+```
+
 Examples:
 
 ```bash
-killpy
+killpy                                        # TUI, scan cwd
+killpy --path ~                               # TUI, scan home
+killpy --path ~/projects --exclude "legacy"   # TUI, skip paths with "legacy"
+killpy --path ~ --exclude "archive,backups"   # multiple patterns
+killpy --path ~/projects --delete-all         # headless, with confirmation
+killpy --path ~/projects --delete-all --yes   # fully automated, no prompt
 ```
 
-```bash
-killpy --path ~ --exclude "archive,backups"
-```
+## `killpy list` — inspect environments
 
-```bash
-killpy --path ~/projects --delete-all --yes
-```
-
-## `killpy list`
+![killpy list](https://raw.githubusercontent.com/Tlaloc-Es/killpy/master/docs/gifs/list.gif)
 
 Use `list` when you want read-only inspection.
 
 ```bash
-killpy list --path ~/projects
-killpy list --type venv --type conda
-killpy list --older-than 90
-killpy list --json
-killpy list --json-stream
-killpy list --quiet          # suppress progress output
+killpy list                               # list all detected environments
+killpy list --path ~/projects             # scan a specific path
+killpy list --type venv --type conda      # filter by type (repeatable)
+killpy list --older-than 90               # not modified in the last 90 days
+killpy list --json                        # output as a JSON array
+killpy list --json-stream                 # stream as NDJSON — one line per env
+killpy list --quiet                       # suppress progress output (scripts/CI)
 ```
 
-While scanning, progress is written to **stderr** so stdout stays clean for piping. Use `--quiet` / `-q` to silence progress entirely (useful in scripts or CI).
+While scanning, `killpy list` shows a live progress indicator on **stderr** so you can see which detector is running. Stdout receives only the final output (table, JSON, or NDJSON), so pipes and redirections are never polluted. Use `--quiet` / `-q` to silence the progress indicator entirely (useful in scripts or CI).
 
-The **Path** column mirrors the form of `--path` (relative in → relative out, absolute in → absolute out) and truncates long paths to keep rows readable. Full absolute paths are always preserved in `--json` and `--json-stream` output (see the `absolute_path` field).
+The **Path** column mirrors the form of `--path`: a relative `--path` produces relative paths, an absolute one produces absolute paths (long paths are truncated to keep rows compact). The full absolute path is always available via `--json` / `--json-stream` in the `absolute_path` field.
 
-`--json-stream` emits NDJSON progressively while the scan runs.
+`--json` example output:
 
-## `killpy delete`
-
-Use `delete` when you want a scriptable delete flow with filtering.
-
-```bash
-killpy delete --path ~/projects --dry-run
-killpy delete --path ~/projects --type cache --older-than 30
-killpy delete --path ~/projects --yes
-killpy delete --path ~/projects --force   # include in-use (⚠) environments
+```json
+[
+  {
+    "path": "projects/my-app/.venv",
+    "absolute_path": "/home/user/projects/my-app/.venv",
+    "name": "my-app/.venv",
+    "type": "venv",
+    "last_modified": "2025-11-02T14:23:01+00:00",
+    "size_bytes": 54393984,
+    "size_human": "51.88 MB",
+    "managed_by": null,
+    "is_system_critical": false
+  }
+]
 ```
 
-Environments currently in use (the one killpy runs from, or the pyenv global version) are flagged system-critical and **skipped by default** — they are listed as "currently in use" and only deleted when `--force` is given. The same applies to `killpy --delete-all`.
-
-## `killpy stats`
-
-Use `stats` to aggregate counts and sizes by detected type.
+`--json-stream` emits NDJSON progressively while the scan runs — ideal for piping into `jq` or processing in scripts before the full scan completes:
 
 ```bash
-killpy stats --path ~/projects
-killpy stats --json
+killpy list --json-stream --path ~ | jq 'select(.type == "conda") | .size_human'
 ```
 
-## `killpy clean`
+![killpy list --json](https://raw.githubusercontent.com/Tlaloc-Es/killpy/master/docs/gifs/list-json.gif)
 
-Use `clean` to recursively remove `__pycache__` directories.
+## `killpy find` — locate environments with a package
 
-```bash
-killpy clean --path ~/projects
-```
+![killpy find](https://raw.githubusercontent.com/Tlaloc-Es/killpy/master/docs/gifs/find.gif)
 
-This command is narrower than the full cache detector model. It does not currently remove every cache type that the scanner can detect.
-
-## `killpy stats`
-
-Use `stats` to aggregate counts and sizes by detected type.
+Find every environment that has a given package installed. `PACKAGE` accepts
+standard PEP 508 / uv-style version specifiers.
 
 ```bash
-killpy stats --path ~/projects
-killpy stats --json
-killpy stats --history           # show cumulative scan history from ~/.killpy/history.json
-```
-
-The `--history` flag reads from the tracker database (`~/.killpy/history.json`) and shows aggregated totals across all past scans and deletions — useful to see how much space has been reclaimed over time.
-
-## `killpy find`
-
-Use `find` to locate every environment that has a specific package installed, with full support for PEP 508 / uv-style version specifiers.
-
-```bash
-killpy find requests
-killpy find "requests>=2.28"
-killpy find "numpy>=1.24,<2.0"
-killpy find "django==4.2.*"
-killpy find "scipy~=1.11"
+killpy find requests                      # any version of requests
+killpy find "flask>=1.0"                   # version specifier
+killpy find "numpy>=1.24,<2.0"             # combined constraints
+killpy find "django==4.2.*"                # wildcard match
+killpy find "scipy~=1.11"                  # compatible release
 ```
 
 Optional flags:
@@ -102,7 +102,7 @@ Optional flags:
 # Limit the scan to a specific root directory
 killpy find "fastapi>=0.100" --path ~/projects
 
-# Filter by environment type
+# Filter by environment type (repeatable)
 killpy find torch --type venv --type conda
 
 # Machine-readable output
@@ -111,20 +111,85 @@ killpy find "numpy>=2" --json
 
 The command reads `*.dist-info/METADATA` files from each environment's `site-packages` directory — no interpreter invocation is needed.
 
-## `killpy doctor`
+## `killpy delete` — remove environments
 
-Use `doctor` to get a smart health report that scores and prioritises environments for deletion.
+![killpy delete](https://raw.githubusercontent.com/Tlaloc-Es/killpy/master/docs/gifs/delete.gif)
+
+Use `delete` when you want a scriptable delete flow with filtering.
 
 ```bash
-killpy doctor                           # top 5 offenders in current directory
-killpy doctor --path ~/projects         # scan a specific directory
-killpy doctor --all                     # full report grouped by category
-killpy doctor --json                    # machine-readable JSON output
+killpy delete                             # interactive confirmation before delete
+killpy delete --yes                       # skip confirmation
+killpy delete --dry-run                   # preview — nothing is deleted
+killpy delete --type venv                 # only a specific type
+killpy delete --type venv --type cache    # multiple types
+killpy delete --older-than 180 --yes      # delete stale envs, no prompt
+killpy delete --force                     # include in-use (⚠) environments
+killpy delete --path ~/projects
 ```
 
-### How scoring and classification work
+Environments currently in use (the one killpy runs from, or the pyenv global version) are flagged system-critical and **skipped by default** — they are listed as "currently in use" and only deleted when `--force` is given. The same applies to `killpy --delete-all`.
 
-`doctor` processes environments in two phases.
+## `killpy stats` — disk usage summary
+
+![killpy stats](https://raw.githubusercontent.com/Tlaloc-Es/killpy/master/docs/gifs/stats.gif)
+
+Use `stats` to aggregate counts and sizes by detected type.
+
+```bash
+killpy stats
+killpy stats --path ~/projects
+killpy stats --json
+killpy stats --history           # cumulative scan history
+```
+
+The `--history` flag reads from the tracker database (`~/.killpy/history.json`) and shows aggregated totals across all past scans and deletions — useful to see how much space has been reclaimed over time.
+
+Example output:
+
+```
+         Environment stats
+┌──────────────┬───────┬────────────┬──────────┐
+│ Type         │ Count │ Total size │ Avg size │
+├──────────────┼───────┼────────────┼──────────┤
+│ venv         │    12 │    4.2 GB  │  350 MB  │
+│ conda        │     3 │    2.1 GB  │  700 MB  │
+│ cache        │    45 │  890.0 MB  │   20 MB  │
+│ poetry       │     6 │  750.0 MB  │  125 MB  │
+└──────────────┴───────┴────────────┴──────────┘
+
+Total: 66 environment(s) — 7.9 GB
+```
+
+## `killpy clean` — remove cache directories
+
+![killpy clean](https://raw.githubusercontent.com/Tlaloc-Es/killpy/master/docs/gifs/clean.gif)
+
+```bash
+killpy clean
+killpy clean --path ~/projects
+```
+
+Removes `__pycache__` directories recursively under the target path. This command is narrower than the full cache detector model — it does not currently remove every cache type that the scanner can detect.
+
+## `killpy doctor` — smart health report
+
+```
+Usage: killpy doctor [OPTIONS]
+
+Options:
+  --path DIRECTORY  Root directory to scan  [default: cwd]
+  --all             Show all environments grouped by category
+                    (HIGH / MEDIUM / LOW). Default shows only the top 5.
+  --json            Output as JSON.
+  --help            Show this message and exit.
+```
+
+![killpy doctor](https://raw.githubusercontent.com/Tlaloc-Es/killpy/master/docs/gifs/doctor.gif)
+
+`doctor` analyses every detected virtual environment in two phases.
+
+### How scoring and classification work
 
 **Phase 1 — Scoring (for sorting only)**
 
@@ -143,7 +208,7 @@ The weighted average is:
 score = (0.25 × size_score + 0.30 × age_score + 0.25 × orphan_score + 0.20 × git_score) / 1.0
 ```
 
-The score is used **only for ordering** results within the same category (highest score shown first). It does not determine the category.
+The score is used **only for ordering** results within the same category (highest score shown first). It does **not** determine the category itself.
 
 **Phase 2 — Rule-based classification**
 
@@ -155,27 +220,43 @@ The category is assigned deterministically by evaluating rules in order:
 | 2 | `git.is_active == True` **or** `age < 120 days` | `LOW` |
 | 3 | `age ≥ 120 days` *(exhaustive fallback)* | `MEDIUM` |
 
-Age and orphan status dominate. Size has **no effect** on the category.
+Age and orphan status are the dominant signals. Size has **no effect** on the category.
 
 | Category | Recommended action |
 |----------|--------------------|
-| `HIGH` | Delete — unused and orphaned |
-| `MEDIUM` | Review — possibly unused |
-| `LOW` | Keep — actively used / Keep |
+| `HIGH` | Delete — unused and orphaned (age + orphan status dominate) |
+| `MEDIUM` | Review — possibly unused (moderately stale, no strong active signal) |
+| `LOW` | Keep — active git repo or recently modified |
 
-Environments are classified into three categories:
+### Examples
 
-| Category | Meaning |
-|----------|---------|
-| `HIGH` | Delete — unused and orphaned (age + orphan status dominate). |
-| `MEDIUM` | Review — possibly unused (moderately stale, no strong active signal). |
-| `LOW` | Keep — active git repo or recently modified. |
+```bash
+killpy doctor                           # top 5 offenders in current directory
+killpy doctor --path ~                  # scan home folder
+killpy doctor --all                     # show all environments by category
+killpy doctor --json                    # machine-readable output
+killpy doctor --path ~/projects --all   # full report for a specific tree
+```
 
 ### Default output
 
 Shows the **Top 5 Offenders** table (highest-scoring environments) with a hint if MEDIUM or LOW environments exist but are hidden:
 
 ```
+──────────── Environment Health Report ────────────
+Scanned: /home/user/projects
+Environments found: 18  |  Total size: 6.2 GB  |  Estimated wasted: 3.8 GB
+  HIGH (safe to delete): 5  MEDIUM (review): 7  LOW (keep): 6
+
+               Top 5 Offenders
+┌──────────────────────────┬────────┬───────────┬───────┬──────────┐
+│ Path                     │   Size │ Age (days)│ Score │ Category │
+├──────────────────────────┼────────┼───────────┼───────┼──────────┤
+│ ~/old-project/.venv      │ 850 MB │       312 │  0.94 │ HIGH     │
+│ ~/tutorial2023/.venv     │ 420 MB │       198 │  0.87 │ HIGH     │
+└──────────────────────────┴────────┴───────────┴───────┴──────────┘
+
+Recommendation: Run `killpy delete --older-than 180` to free up to 3.8 GB.
 (12 MEDIUM/LOW environment(s) hidden — run with --all to see them)
 ```
 
@@ -188,6 +269,8 @@ killpy doctor --path ~ --all
 ```
 
 ### JSON output
+
+The JSON output is useful for scripting or auditing:
 
 ```bash
 killpy doctor --json | jq '.suggestions[] | select(.category=="HIGH") | .env_path'

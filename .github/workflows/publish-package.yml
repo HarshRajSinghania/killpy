@@ -31,3 +31,34 @@ jobs:
         run: |
           uv build
           uv publish
+
+  create-github-release:
+    needs: publish-service-client-package
+    runs-on: ubuntu-latest
+    name: "Create GitHub Release"
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Extract release notes from CHANGELOG.md"
+        id: notes
+        run: |
+          TAG="$(git describe --tags --abbrev=0)"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          awk -v ver="$TAG" '
+            $1 == "##" && $2 == ver { found = 1; next }
+            found && $1 == "##" { exit }
+            found { print }
+          ' CHANGELOG.md > "$RUNNER_TEMP/release-notes.md"
+      - name: "Create release"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.notes.outputs.tag }}"
+          gh release create "$TAG" \
+            --title "killpy $TAG" \
+            --notes-file "$RUNNER_TEMP/release-notes.md" \
+            --verify-tag
