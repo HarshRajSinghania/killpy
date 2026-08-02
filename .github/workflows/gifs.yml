@@ -6,12 +6,15 @@ name: Record GIFs
 # commits the GIFs deliberately.
 #
 #   • Run manually (Actions → "Record GIFs" → Run workflow) to get fresh GIFs.
-#   • On PRs that touch the tapes, the CLI, or the fixtures it also runs, acting
-#     as a "the tapes still render" check (the artifact is there if you want it).
+#   • On pushes to master that touch the tapes, the CLI, or the fixtures it also
+#     runs, acting as a "the tapes still render" check (the artifact is there if
+#     you want it).
 
 on:
   workflow_dispatch:
-  pull_request:
+  push:
+    branches:
+      - master
     paths:
       - tapes/**
       - killpy/**
