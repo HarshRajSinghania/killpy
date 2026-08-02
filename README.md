@@ -18,11 +18,11 @@ uvx killpy --path ~
 
 [![PyPI](https://img.shields.io/pypi/v/killpy.svg)](https://pypi.org/project/killpy/)
 [![Python](https://img.shields.io/pypi/pyversions/killpy.svg)](https://pypi.org/project/killpy/)
-[![Downloads](https://static.pepy.tech/personalized-badge/killpy?period=month&units=international_system&left_color=grey&right_color=blue&left_text=PyPi%20Downloads)](https://pepy.tech/project/killpy)
+[![Downloads](https://static.pepy.tech/personalized-badge/killpy?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads)](https://pepy.tech/project/killpy)
 [![Stars](https://img.shields.io/github/stars/Tlaloc-Es/killpy?color=yellow&style=flat)](https://github.com/Tlaloc-Es/killpy/stargazers)
 [![Coverage](https://codecov.io/gh/Tlaloc-Es/killpy/branch/master/graph/badge.svg)](https://codecov.io/gh/Tlaloc-Es/killpy)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](<https://twitter.com/intent/tweet?text=%F0%9F%90%8D%20KillPy%20helps%20you%20reclaim%20disk%20space%20by%20detecting%20unused%20Python%20environments%20(.venv,%20poetry%20env,%20conda%20env)%20and%20pipx%20packages.%20Clean,%20organize%20and%20free%20up%20space%20effortlessly!%20%F0%9F%9A%80&url=https://github.com/Tlaloc-Es/KillPy>)
+[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=%F0%9F%90%8D%20killpy%20is%20npkill%20for%20Python%20%E2%80%94%20find%20and%20delete%20unused%20venv,%20conda,%20poetry,%20pipx%20and%20pyenv%20environments%20and%20free%2010%E2%80%9340%20GB%20of%20disk%20space.%20Try%20it:%20uvx%20killpy%20--path%20~&url=https://github.com/Tlaloc-Es/killpy)
 [![Awesome Python](https://awesome.re/badge.svg)](https://github.com/vinta/awesome-python)
 
 ![killpy in action](https://raw.githubusercontent.com/Tlaloc-Es/killpy/master/docs/gifs/demo.gif)
@@ -361,7 +361,7 @@ ______________________________________________________________________
 `killpy` ships four hooks for [pre-commit](https://pre-commit.com/). Add the ones you need to your `.pre-commit-config.yaml`:
 
 ```yaml
-- repo: https://github.com/Tlaloc-Es/KillPy
+- repo: https://github.com/Tlaloc-Es/killpy
   rev: 1.1.0
   hooks:
     - id: killpy                  # remove __pycache__ on every commit
@@ -386,7 +386,7 @@ pre-commit run killpy-remove-venv --hook-stage manual
 Typical minimal setup (safe for daily use):
 
 ```yaml
-- repo: https://github.com/Tlaloc-Es/KillPy
+- repo: https://github.com/Tlaloc-Es/killpy
   rev: 1.1.0
   hooks:
     - id: killpy
