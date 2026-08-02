@@ -11,6 +11,7 @@ from rich.console import Console
 from killpy.cleaner import Cleaner, CleanerError
 from killpy.commands._utils import filter_envs, partition_in_use
 from killpy.files import format_size
+from killpy.hints import maybe_star_hint
 from killpy.intelligence.tracker import UsageTracker
 from killpy.scanner import Scanner
 
@@ -140,3 +141,5 @@ def delete_cmd(
 
     if errors:
         sys.exit(1)
+
+    maybe_star_hint(freed, console)

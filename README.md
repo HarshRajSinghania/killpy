@@ -336,6 +336,10 @@ killpy delete --dry-run
 
 Nothing is removed. You see exactly what would happen.
 
+**How do I disable the one-line hint shown after deletions?**
+
+Set `KILLPY_NO_HINT=1`. The hint is a single line shown only in interactive terminals — it never appears in pipes, scripts, JSON output, or CI.
+
 **Why is Python using so much disk space?**
 
 Each virtual environment is a full copy (or symlinked tree) of a Python interpreter plus all installed packages. A typical project `.venv` with common dependencies weighs 200 MB–1 GB. Multiply by dozens of projects and you get tens of gigabytes — all orphaned when the project is archived.

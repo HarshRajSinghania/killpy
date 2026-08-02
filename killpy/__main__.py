@@ -21,6 +21,7 @@ from killpy.commands.find import find_cmd
 from killpy.commands.list import list_cmd
 from killpy.commands.stats import stats_cmd
 from killpy.files import format_size
+from killpy.hints import maybe_star_hint
 from killpy.intelligence.tracker import UsageTracker
 from killpy.scanner import Scanner
 
@@ -96,6 +97,8 @@ def _run_delete_all(
     if errors:
         sys.exit(1)
 
+    maybe_star_hint(freed, console)
+
 
 @click.group(invoke_without_command=True)
 @click.option(
@@ -146,6 +149,7 @@ def cli(ctx, path: Path, exclude: str, delete_all: bool, yes: bool, force: bool)
         else:
             app = TableApp(root_dir=path, excluded=excluded)
             app.run()
+            maybe_star_hint(app.bytes_release)
 
 
 cli.add_command(clean_cmd, name="clean")

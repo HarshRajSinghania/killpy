@@ -130,6 +130,8 @@ killpy delete --path ~/projects
 
 Environments currently in use (the one killpy runs from, or the pyenv global version) are flagged system-critical and **skipped by default** — they are listed as "currently in use" and only deleted when `--force` is given. The same applies to `killpy --delete-all`.
 
+After a successful delete in an interactive terminal, killpy prints one final line with the total space freed and the project URL. It is suppressed automatically when stdout is not a TTY (pipes, scripts) or when the `CI` environment variable is set, and can be disabled permanently with `KILLPY_NO_HINT=1`.
+
 ## `killpy stats` — disk usage summary
 
 ![killpy stats](https://raw.githubusercontent.com/Tlaloc-Es/killpy/master/docs/gifs/stats.gif)
