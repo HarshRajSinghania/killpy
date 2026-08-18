@@ -1,3 +1,13 @@
+## 1.3.0 (2026-08-18)
+
+### Feat
+
+- add minimum size filtering
+
+### Fix
+
+- **min-size**: parse sizes exactly and keep the doctor JSON shape stable
+
 ## 1.2.0 (2026-08-18)
 
 ### Feat
