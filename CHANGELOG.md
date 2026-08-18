@@ -1,3 +1,13 @@
+## 1.2.0 (2026-08-18)
+
+### Feat
+
+- add --sort and --reverse flags to killpy list (fixes #33)
+
+### Fix
+
+- **list**: keep --json-stream in detection order and pass repo lint
+
 ## 1.1.0 (2026-08-02)
 
 ### Feat
