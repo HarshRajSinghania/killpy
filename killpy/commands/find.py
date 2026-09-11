@@ -127,8 +127,7 @@ def package_version_match(
     "--min-size",
     type=SIZE,
     default=None,
-    metavar="SIZE",
-    help="Only search environments at least this large (for example, 500MB or 1.5GB).",
+    help="Only search environments at least this large (for example, 500MB or 1.5GiB).",
 )
 @click.option(
     "--json",

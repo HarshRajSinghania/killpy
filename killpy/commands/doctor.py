@@ -46,18 +46,17 @@ _ENV_TYPES: set[str] = {
     help="Root directory to scan.",
 )
 @click.option(
+    "--min-size",
+    type=SIZE,
+    default=None,
+    help="Only analyse environments at least this large (for example, 500MB or 1.5GiB).",
+)
+@click.option(
     "--json",
     "as_json",
     is_flag=True,
     default=False,
     help="Output as JSON.",
-)
-@click.option(
-    "--min-size",
-    type=SIZE,
-    default=None,
-    metavar="SIZE",
-    help="Only analyse environments at least this large (for example, 500MB or 1.5GB).",
 )
 @click.option(
     "--all",
