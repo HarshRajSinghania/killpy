@@ -1,4 +1,4 @@
-"""``killpy stats`` – aggregate disk usage grouped by environment type."""
+"""``killpy stats`` \u2013 aggregate disk usage grouped by environment type."""
 
 from __future__ import annotations
 
@@ -24,6 +24,12 @@ from killpy.scanner import Scanner
     help="Root directory to scan.",
 )
 @click.option(
+    "--min-size",
+    type=SIZE,
+    default=None,
+    help="Only include environments at least this large (for example, 500MB or 1.5GB).",
+)
+@click.option(
     "--json",
     "as_json",
     is_flag=True,
@@ -31,21 +37,26 @@ from killpy.scanner import Scanner
     help="Output as JSON.",
 )
 @click.option(
-    "--min-size",
-    type=SIZE,
-    default=None,
-    metavar="SIZE",
-    help="Only include environments at least this large (for example, 500MB or 1.5GB).",
-)
-@click.option(
     "--history",
     is_flag=True,
     default=False,
     help="Show cumulative scan history from ~/.killpy/history.json.",
 )
-def stats_cmd(path: Path, as_json: bool, min_size: int | None, history: bool) -> None:
+@click.pass_context
+def stats_cmd(
+    ctx: click.Context,
+    path: Path,
+    as_json: bool,
+    min_size: int | None,
+    history: bool,
+) -> None:
     """Show disk-usage statistics grouped by environment type."""
     if history:
+        path_from_cli = ctx.get_parameter_source("path") == click.core.ParameterSource.COMMANDLINE
+        if min_size is not None or path_from_cli:
+            raise click.UsageError(
+                "--history reports stored totals, so --min-size and --path cannot be combined with it."
+            )
         _show_history(as_json)
         return
 
@@ -101,7 +112,7 @@ def stats_cmd(path: Path, as_json: bool, min_size: int | None, history: bool) ->
 
     console.print(table)
     console.print(
-        f"\nTotal: [bold]{total_count}[/bold] environment(s) — "
+        f"\nTotal: [bold]{total_count}[/bold] environment(s) \u2014 "
         f"[bold]{format_size(total_bytes)}[/bold]"
     )
 
