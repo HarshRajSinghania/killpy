@@ -48,3 +48,33 @@ killpy list --sort date                  # newest modified first
 killpy list --sort size --reverse        # smallest size first
 killpy list --sort name                  # alphabetical A-Z
 ```
+
+Sorting applies to the table and `--json` output. `--json-stream` always emits in detection order \u2014 results stream out as each detector finishes.
+
+## Path filtering in the TUI
+
+Press `/` in the TUI to filter visible rows by path. The filter is a
+case-insensitive substring match and updates the environment table live as you
+type.
+
+Examples:
+
+```text
+django
+```
+
+```text
+projects/api
+```
+
+Any row whose path contains the typed text is kept; an empty query shows all
+rows.
+
+## Multi-select workflow
+
+1. Press `t` to enable multi-select mode.
+1. Press `Space` to toggle individual rows.
+1. Press `a` to select or deselect all visible non-deleted rows.
+1. Press `Ctrl+d` to delete the selected set.
+
+The multi-select model operates on the currently visible rows, so active filtering can help narrow large scans before deletion.
