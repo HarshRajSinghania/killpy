@@ -12,7 +12,6 @@ from click.testing import CliRunner
 from killpy.__main__ import cli
 from killpy.commands._utils import SIZE
 from killpy.intelligence.tracker import UsageTracker
-from killpy.models import Environment
 
 
 def test_iec_units_match_si_binary_aliases() -> None:
@@ -26,18 +25,6 @@ def test_iec_units_match_si_binary_aliases() -> None:
 def test_rejects_non_ascii_digits_and_invalid_units(value: str) -> None:
     with pytest.raises(click.UsageError):
         SIZE.convert(value, None, None)
-
-
-def _env(name: str = "demo", size: int = 1000) -> Environment:
-    return Environment(
-        path=f"/tmp/{name}",
-        name=name,
-        type=".venv",
-        size_bytes=size,
-        last_modified=__import__("datetime").datetime.now(
-            tz=__import__("datetime").timezone.utc
-        ),
-    )
 
 
 def test_stats_history_rejects_min_size(tmp_path: Path) -> None:
@@ -54,9 +41,7 @@ def test_stats_history_rejects_explicit_path(tmp_path: Path) -> None:
     tracker = UsageTracker(tmp_path / "history.json")
     runner = CliRunner()
     with patch("killpy.commands.stats.UsageTracker", return_value=tracker):
-        result = runner.invoke(
-            cli, ["stats", "--history", "--path", str(tmp_path)]
-        )
+        result = runner.invoke(cli, ["stats", "--history", "--path", str(tmp_path)])
     assert result.exit_code != 0
     assert "--history" in result.output
     assert "--path" in result.output
