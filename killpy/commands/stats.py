@@ -24,6 +24,12 @@ from killpy.scanner import Scanner
     help="Root directory to scan.",
 )
 @click.option(
+    "--min-size",
+    type=SIZE,
+    default=None,
+    help="Only include environments at least this large (for example, 500MB or 1.5GB).",
+)
+@click.option(
     "--json",
     "as_json",
     is_flag=True,
@@ -31,21 +37,23 @@ from killpy.scanner import Scanner
     help="Output as JSON.",
 )
 @click.option(
-    "--min-size",
-    type=SIZE,
-    default=None,
-    metavar="SIZE",
-    help="Only include environments at least this large (for example, 500MB or 1.5GB).",
-)
-@click.option(
     "--history",
     is_flag=True,
     default=False,
     help="Show cumulative scan history from ~/.killpy/history.json.",
 )
-def stats_cmd(path: Path, as_json: bool, min_size: int | None, history: bool) -> None:
+def stats_cmd(
+    path: Path, as_json: bool, min_size: int | None, history: bool
+) -> None:
     """Show disk-usage statistics grouped by environment type."""
     if history:
+        ctx = click.get_current_context()
+        path_given = ctx.get_parameter_source("path") is click.core.ParameterSource.COMMANDLINE
+        if min_size is not None or path_given:
+            raise click.UsageError(
+                "--history cannot be combined with --min-size or --path; "
+                "history reports stored totals and does not scan."
+            )
         _show_history(as_json)
         return
 
