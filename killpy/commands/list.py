@@ -111,7 +111,7 @@ def _print_table(envs: list, console: Console) -> None:
     "--min-size",
     type=SIZE,
     default=None,
-    help="Only show environments at least this large (for example, 500MB or 1.5GiB).",
+    help="Only show environments at least this large (for example, 500MB or 1.5GB).",
 )
 @click.option(
     "--sort",

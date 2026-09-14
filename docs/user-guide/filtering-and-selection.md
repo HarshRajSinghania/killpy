@@ -37,7 +37,7 @@ killpy delete --min-size 1GB --dry-run   # preview the big ones
 
 Sizes take a unit (`B`, `KB`/`KiB`, `MB`/`MiB`, `GB`/`GiB` or `TB`/`TiB`, case-insensitive) and accept decimals such as `1.5GB`. Units are binary — `1KB` and `1KiB` are both 1024 bytes — so a threshold matches exactly what the tool prints in its `Size` column. A value without a unit is a usage error.
 
-`killpy stats --history` reports stored totals rather than a fresh scan. Combining it with `--min-size` or `--path` is an error, because those filters cannot apply to stored totals.
+`killpy stats --history` reports stored totals rather than a fresh scan, so combining it with `--min-size` or `--path` is a usage error.
 
 ## Sorting output
 

@@ -44,7 +44,7 @@ from killpy.scanner import Scanner
     "--min-size",
     type=SIZE,
     default=None,
-    help="Only delete environments at least this large (for example, 500MB or 1.5GiB).",
+    help="Only delete environments at least this large (for example, 500MB or 1.5GB).",
 )
 @click.option(
     "--dry-run",

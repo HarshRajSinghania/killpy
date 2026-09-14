@@ -42,14 +42,12 @@ _SIZE_UNITS = {
     "tb": 1 << 40,
     "tib": 1 << 40,
 }
-# ASCII digits only: ``\d`` would accept Unicode numerals such as ``٥MB``.
-# The optional ``i`` accepts IEC spellings (KiB/MiB/GiB/TiB) that match the
-# binary multipliers already used by KB/MB/GB/TB.
-_SIZE_PATTERN = re.compile(r"([0-9]+(?:\.[0-9]+)?)\s*([kmgt]?i?b)", re.IGNORECASE)
+# ASCII digits only: \d is Unicode-aware and would accept non-ASCII digits.
+_SIZE_PATTERN = re.compile(r"([0-9]+(?:\.[0-9]+)?)\s*([kmgt]i?b|b)", re.IGNORECASE)
 
 
 class SizeParamType(click.ParamType):
-    """Convert human-readable byte sizes such as ``500MB`` or ``1.5GiB``."""
+    """Convert human-readable byte sizes such as ``500MB``, ``1.5GiB``."""
 
     name = "SIZE"
 

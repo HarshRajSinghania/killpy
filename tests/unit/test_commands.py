@@ -88,7 +88,7 @@ class TestSizeParamType:
             "",  # empty
             "1,5GB",  # comma decimal
             "infMB",  # float sentinel
-            "٥MB",  # Arabic-Indic digits
+            "٥MB",  # non-ASCII digits
         ],
     )
     def test_rejects_invalid_sizes(self, value: str) -> None:
@@ -99,22 +99,6 @@ class TestSizeParamType:
         # A float mantissa turns 309+ digits into infinity and int() then
         # raises; an absurd threshold should just match nothing instead.
         assert SIZE.convert("9" * 309 + "MB", None, None) > 10**300
-
-
-class TestStatsHistoryConflicts:
-    def test_history_with_min_size_is_rejected(self) -> None:
-        runner = CliRunner()
-        result = runner.invoke(cli, ["stats", "--history", "--min-size", "1MB"])
-        assert result.exit_code != 0
-        assert "--history" in result.output
-        assert "--min-size" in result.output
-
-    def test_history_with_path_is_rejected(self) -> None:
-        runner = CliRunner()
-        result = runner.invoke(cli, ["stats", "--history", "--path", "/tmp"])
-        assert result.exit_code != 0
-        assert "--history" in result.output
-        assert "--path" in result.output
 
 
 # ---------------------------------------------------------------------------
@@ -260,6 +244,20 @@ class TestStatsCommand:
         data = json.loads(result.output)
         assert data["total_count"] == 1
         assert data["total_size_bytes"] == 1024
+
+    def test_history_rejects_min_size(self) -> None:
+        runner = CliRunner()
+        result = runner.invoke(cli, ["stats", "--history", "--min-size", "1MB"])
+        assert result.exit_code == 2
+        assert "--history" in result.output
+        assert "--min-size" in result.output
+
+    def test_history_rejects_explicit_path(self) -> None:
+        runner = CliRunner()
+        result = runner.invoke(cli, ["stats", "--history", "--path", "/tmp"])
+        assert result.exit_code == 2
+        assert "--history" in result.output
+        assert "--path" in result.output
 
 
 # ---------------------------------------------------------------------------
